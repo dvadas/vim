@@ -1,6 +1,13 @@
+execute pathogen#infect()
+
+call plug#begin('~/.vim/plugged')
+Plug '~/.fzf'
+Plug 'junegunn/fzf.vim'
+call plug#end()
+
 syntax on
 
-set ts=4 sw=4
+set ts=2 sw=2 expandtab
 set ai cindent
 set cinkeys-=0#
 filetype plugin indent on
@@ -35,15 +42,22 @@ set listchars=tab:\|>
 nnoremap x "_x
 nnoremap <del> "_x
 
+
 let mapleader = ","
 " revisual text that just got pasted
 nnoremap <leader>v V`]
 " Switch between header and cpp files
-map <leader>m :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
-map <leader>n :vsp %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
+map <leader>m :e %:p:s,.h$,.X123X,:s,.cc$,.h,:s,.X123X$,.cc,<CR>
+map <leader>n :vsp %:p:s,.h$,.X123X,:s,.cc$,.h,:s,.X123X$,.cc,<CR>
 
-map <ESC>OA <C-y>
-map <ESC>OB <C-e>
+" Copy visual text to clipboard
+source /usr/local/google/home/dvadas/.vim/osc52.vim
+vmap <leader>y y:call SendViaOSC52(getreg('"'))<cr>
+
+"map <ESC>OA <C-y>
+"map <ESC>OB <C-e>
+map <ESC>[1;5A <C-y>
+map <ESC>[1;5B <C-e>
 
 map <CR> i<CR><Esc>l
 map <Space> i <Esc>l
@@ -61,18 +75,18 @@ cabbrev <expr> q ((getcmdtype() == ':' && getcmdpos() <= 2)? 'call CloseSomethin
 
 " Reload the file to reflect the permissions change
 function! P4Revert()
-    !p4 revert %
+    !g4 revert %
     e
 endfunction
 function! P4Edit()
-    !p4 edit %
+    !g4 edit %
     e
 endfunction
 
 " edit, revert, etc the current file
-cabbrev <expr> p4e 'call P4Edit()'
-cabbrev <expr> p4r 'call P4Revert()'
-cabbrev <expr> p4d '!p4 diff %'
+cabbrev <expr> g4e 'call P4Edit()'
+cabbrev <expr> g4r 'call P4Revert()'
+cabbrev <expr> g4d '!g4 diff %'
 
 function! MoveToCurrentTab(tabnum)
   let l:tab_nr = tabpagenr()
@@ -173,5 +187,5 @@ function! Wipeout()
   endtry
 endfunction
 
-:command! Wipe call Wipeout()
+":command! Wipe call Wipeout()
 
